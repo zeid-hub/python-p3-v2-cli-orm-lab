@@ -1,3 +1,4 @@
+# lib/helpers.py
 from classes.department import Department
 from classes.employee import Employee
 
@@ -5,6 +6,8 @@ from classes.employee import Employee
 def exit_program():
     print("Goodbye!")
     exit()
+
+# We'll implement the department functions in this lesson
 
 
 def list_departments():
@@ -87,13 +90,7 @@ def update_employee():
 
 
 def delete_employee():
-    id = input("Enter the employee's id: ")
-    employee = Employee.find_by_id(id)
-    if employee:
-        employee.delete()
-        print(f'Employee {id} deleted')
-    else:
-        print(f'Employee {id} not found')
+    pass
 
 
 def list_department_employees():

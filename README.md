@@ -60,7 +60,7 @@ contents. (Another alternative is to run `python lib/debug.py` and use the
 
 ---
 
-### `lib/cli.py` and `lib/helpers.py`
+### `cli.py` and `helpers.py`
 
 The file `lib/cli.py` contains a command line interface for our company database
 application. The CLI displays a menu of commands. Each numeric choice will call
@@ -87,13 +87,13 @@ Please select an option:
 13: List all employees in a department
 ```
 
-You will implement the helper functions related to the `Employee` class (called
-by options `7` through `13`). The file `lib/helpers.py` has a function for each
-option containing a `pass` statement. You will update each function to replace
-the `pass` statement with code to implement the necessary functionality.
+You will implement the helper functions related to the `Employee` class (options
+`7` through `13`). The file `lib/helpers.py` has a function for each option
+containing a `pass` statement. You need to update each function to replace the
+`pass` statement with code to implement the necessary functionality.
 
-NOTE: All functions below should call the various existing ORM methods in the
-`Employee` and `Department` classes.
+Each helper function should call ORM methods in the `Employee` and `Department`
+classes.
 
 ### `list_employees()`
 
@@ -108,11 +108,11 @@ Test the function by selecting option `7` when you run `python lib/cli.py`:
 Please select an option:
 ....
 > 7
-<Employee 1: Amir, Accountant, Department: Payroll >
-<Employee 2: Bola, Manager, Department: Payroll >
-<Employee 3: Charlie, Manager, Department: Human Resources >
-<Employee 4: Dani, Benefits Coordinator, Department: Human Resources >
-<Employee 5: Hao, New Hires Coordinator, Department: Human Resources >
+<Employee 1: Amir, Accountant, Department ID: 1>
+<Employee 2: Bola, Manager, Department ID: 1>
+<Employee 3: Charlie, Manager, Department ID: 2>
+<Employee 4: Dani, Benefits Coordinator, Department ID: 2>
+<Employee 5: Hao, New Hires Coordinator, Department ID: 2>
 ```
 
 ### `find_employee_by_name()`
@@ -128,7 +128,7 @@ Try entering a name that exists in the database:
 ```bash
 > 8
 Enter the employee's name: Dani
-<Employee 4: Dani, Benefits Coordinator, Department: Human Resources >
+<Employee 4: Dani, Benefits Coordinator, Department ID: 2>
 ```
 
 Try entering a name not in the database:
@@ -137,7 +137,6 @@ Try entering a name not in the database:
 > 8
 Enter the employee's name: Fred
 Employee Fred not found
-
 ```
 
 ### `find_employee_by_id()`
@@ -153,7 +152,7 @@ Try entering an id that exists in the database:
 ```bash
 > 9
 Enter the employee's id: 2
-<Employee 2: Bola, Manager, Department: Payroll >
+<Employee 2: Bola, Manager, Department ID: 1>
 ```
 
 Try entering an id not in the database:
@@ -162,7 +161,6 @@ Try entering an id not in the database:
 > 9
 Enter the employee's id: 99
 Employee 99 not found
-
 ```
 
 ### `create_employee()`
@@ -170,11 +168,10 @@ Employee 99 not found
 The function `create_employee()` should:
 
 1. Prompt for and read in a name, job title, and department id.
-2. Find the department associated with the department id.
-3. Create and persist a new `Employee` class instance, surrounding the code in a
+2. Create and persist a new `Employee` class instance, surrounding the code in a
    `try/except` block in case an exception is thrown by the `name`, `job_title`,
-   or `department` property setter methods.
-4. Print a message indicating whether the `Employee` object was successfully
+   or `department_id` property setter methods.
+3. Print a message indicating that the `Employee` object was successfully
    created, or print an error message if an exception is thrown.
 
 Test the function by selecting option `10` when you run `python lib/cli.py`.
@@ -184,7 +181,7 @@ Test the function by selecting option `10` when you run `python lib/cli.py`.
 Enter the employee's name: Ira
 Enter the employee's job title: Manager
 Enter the employee's department id:1
-Success: <Employee 6: Ira, Manager, Department: Payroll >
+Success: <Employee 6: Ira, Manager, Department ID: 1>
 ```
 
 Confirm the employee was added to the database by selecting option `7` to list
@@ -192,22 +189,22 @@ all employees:
 
 ```bash
 > 7
-<Employee 1: Amir, Accountant, Department: Payroll >
-<Employee 2: Bola, Manager, Department: Payroll >
-<Employee 3: Charlie, Manager, Department: Human Resources >
-<Employee 4: Dani, Benefits Coordinator, Department: Human Resources >
-<Employee 5: Hao, New Hires Coordinator, Department: Human Resources >
-<Employee 6: Ira, Manager, Department: Payroll >
+<Employee 1: Amir, Accountant, Department ID: 1>
+<Employee 2: Bola, Manager, Department ID: 1>
+<Employee 3: Charlie, Manager, Department ID: 2>
+<Employee 4: Dani, Benefits Coordinator, Department ID: 2>
+<Employee 5: Hao, New Hires Coordinator, Department ID: 2>
+<Employee 6: Ira, Manager, Department ID: 1>
 ```
 
-Try entering invalid data for name or job title when creating the employee:
+Try entering invalid data for name or job title:
 
 ```bash
 > 10
 Enter the employee's name:
 Enter the employee's job title: Programmer
 Enter the employee's department id: 1
-Error creating employee:  Name cannot be empty and must be a string
+Error creating employee:  Name must be a non-empty string
 ```
 
 Try entering an invalid department id:
@@ -217,7 +214,7 @@ Try entering an invalid department id:
 Enter the employee's name: Jani
 Enter the employee's job title: Accountant
 Enter the employee's department id:99
-Error creating employee:  Department must be class instance and reference existing entity in database
+Error creating employee:  department_id must reference a department in the database
 ```
 
 ### `update_employee()`
@@ -225,21 +222,19 @@ Error creating employee:  Department must be class instance and reference existi
 The function `update_employee()` should:
 
 1. Prompt for and read in the employee id.
-2. Find the employee in the database using the id.
-3. Print an error message if the employee is not in the database. If the
-   employee is in the database, attempt to do the following steps 4-10 within a
+2. Print an error message if the employee is not in the database. If the
+   employee is in the database, attempt to do the following steps within a
    `try-except` block to catch any exceptions, printing an error message if an
    exception is thrown.
-4. Prompt for a new name and assign the employee object the new name (property
+3. Prompt for a new name to update the `name` attribute (property setter may
+   throw an exception).
+4. Prompt for a new job title to update the `job_title` attribute (property
    setter may throw an exception).
-5. Prompt for a new job title and assign the employee object the new job title
-   (property setter may throw an exception).
-6. Prompt for the employee's new department id.
-7. Find the department based on the department id.
-8. Assign the employee object the new department (property setter may thrown an
-   exception).
-9. Update the employee in the database.
-10. Print a success message after a successful update.
+5. Prompt for the employee's new department id to update the `department_id`
+   attribute (property setter may throw an exception).
+6. Update the employee in the database.
+7. Print a success message after a successful update, or print an appropriate
+   error message if an exception is thrown.
 
 Test the function by selecting option `11` when you run `python lib/cli.py`.
 
@@ -249,19 +244,19 @@ Enter the employee's id: 3
 Enter the employees's new name: Charles
 Enter the employee's new job title:Director
 Enter the employees's new department id: 1
-Success: <Employee 3: Charles, Director, Department: Payroll >
+Success: <Employee 3: Charles, Director, Department ID: 1>
 ```
 
 Confirm the database was updated by listing all employees:
 
 ```bash
 > 7
-<Employee 1: Amir, Accountant, Department: Payroll >
-<Employee 2: Bola, Manager, Department: Payroll >
-<Employee 3: Charles, Director, Department: Payroll >
-<Employee 4: Dani, Benefits Coordinator, Department: Human Resources >
-<Employee 5: Hao, New Hires Coordinator, Department: Human Resources >
-<Employee 6: Ira, Manager, Department: Payroll >
+<Employee 1: Amir, Accountant, Department ID: 1>
+<Employee 2: Bola, Manager, Department ID: 1>
+<Employee 3: Charles, Director, Department ID: 1>
+<Employee 4: Dani, Benefits Coordinator, Department ID: 2>
+<Employee 5: Hao, New Hires Coordinator, Department ID: 2>
+<Employee 6: Ira, Manager, Department ID: 1>
 ```
 
 Try entering an invalid employee id:
@@ -278,7 +273,7 @@ Try entering an invalid name:
 > 11
 Enter the employee's id: 4
 Enter the employees's new name:
-Error updating employee:  Name cannot be empty and must be a string
+Error updating employee:  name must be a non-empty string
 ```
 
 Try entering an invalid job title:
@@ -288,7 +283,7 @@ Try entering an invalid job title:
 Enter the employee's id: 4
 Enter the employees's new name: Danielle
 Enter the employee's new job title:
-Error updating employee:  job_title cannot be empty and must be a string
+Error updating employee:  job_title must be a non-empty string
 ```
 
 Try entering an invalid department id:
@@ -299,7 +294,7 @@ Enter the employee's id: 4
 Enter the employees's new name: Danielle
 Enter the employee's new job title:Senior Benefits Coordinator
 Enter the employees's new department id: 99
-Error updating employee:  Department must be class instance and reference existing entity in database
+Error updating employee:  department_id must reference a department in the database
 ```
 
 ### `delete_employee()`
@@ -320,11 +315,11 @@ Confirm the employee was deleted by listing all employees:
 
 ```bash
 > 7
-<Employee 2: Bola, Manager, Department: Payroll >
-<Employee 3: Charlie, Manager, Department: Human Resources >
-<Employee 4: Dani, Benefits Coordinator, Department: Human Resources >
-<Employee 5: Hao, New Hires Coordinator, Department: Human Resources >
-
+<Employee 2: Bola, Manager, Department ID: 1>
+<Employee 3: Charles, Director, Department ID: 1>
+<Employee 4: Dani, Benefits Coordinator, Department ID: 2>
+<Employee 5: Hao, New Hires Coordinator, Department ID: 2>
+<Employee 6: Ira, Manager, Department ID: 1>
 ```
 
 Try entering a non-existent employee id:
@@ -354,8 +349,16 @@ Test the function by selecting option `13` when you run `python lib/cli.py`.
 ```bash
 > 13
 Enter the department's id: 1
-<Employee 1: Amir, Accountant, Department: Payroll >
-<Employee 2: Bola, Manager, Department: Payroll >
+<Employee 1: Amir, Accountant, Department ID: 1>
+<Employee 2: Bola, Manager, Department ID: 1>
+```
+
+```bash
+> 13
+Enter the department's id: 2
+<Employee 3: Charlie, Manager, Department ID: 2>
+<Employee 4: Dani, Benefits Coordinator, Department ID: 2>
+<Employee 5: Hao, New Hires Coordinator, Department ID: 2>
 ```
 
 Try an id that does not match an existing department:
@@ -364,7 +367,6 @@ Try an id that does not match an existing department:
 > 13
 Enter the department's id: 99
 Department 99 not found
-
 ```
 
 ---
