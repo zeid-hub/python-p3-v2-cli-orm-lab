@@ -24,7 +24,7 @@ The directory structure is as follows:
 ```console
 .
 └── lib
-    ├── classes
+    ├── models
         ├── __init__.py
         ├── department.py
     │   └── employee.py

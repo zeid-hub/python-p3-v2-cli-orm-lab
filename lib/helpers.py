@@ -1,6 +1,6 @@
 # lib/helpers.py
-from classes.department import Department
-from classes.employee import Employee
+from models.department import Department
+from models.employee import Employee
 
 
 def exit_program():
