@@ -24,9 +24,9 @@ def find_department_by_name():
 
 
 def find_department_by_id():
-    id = input("Enter the department's id: ")
-    department = Department.find_by_id(id)
-    print(department) if department else print(f'Department {id} not found')
+    id_ = input("Enter the department's id: ")
+    department = Department.find_by_id(id_)
+    print(department) if department else print(f'Department {id_} not found')
 
 
 def create_department():
@@ -40,9 +40,8 @@ def create_department():
 
 
 def update_department():
-    id = input("Enter the department's id: ")
-    department = Department.find_by_id(id)
-    if department:
+    id_ = input("Enter the department's id: ")
+    if department := Department.find_by_id(id_):
         try:
             name = input("Enter the department's new name: ")
             department.name = name
@@ -54,17 +53,16 @@ def update_department():
         except Exception as exc:
             print("Error updating department: ", exc)
     else:
-        print(f'Department {id} not found')
+        print(f'Department {id_} not found')
 
 
 def delete_department():
-    id = input("Enter the department's id: ")
-    department = Department.find_by_id(id)
-    if department:
+    id_ = input("Enter the department's id: ")
+    if department := Department.find_by_id(id_):
         department.delete()
-        print(f'Department {id} deleted')
+        print(f'Department {id_} deleted')
     else:
-        print(f'Department {id} not found')
+        print(f'Department {id_} not found')
 
 
 # You'll implement the employee functions in the lab
