@@ -1,4 +1,3 @@
-# lib/helpers.py
 from models.department import Department
 from models.employee import Employee
 
@@ -24,6 +23,7 @@ def find_department_by_name():
 
 
 def find_department_by_id():
+    # use a trailing underscore not to override the built-in id function
     id_ = input("Enter the department's id: ")
     department = Department.find_by_id(id_)
     print(department) if department else print(f'Department {id_} not found')
