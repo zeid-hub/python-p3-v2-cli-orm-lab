@@ -122,8 +122,8 @@ class TestDepartment:
 
         # assert department2 row is deleted
         assert (Department.find_by_id(id2) is None)
-        # assert department2 object state remains correct
-        assert ((id2, "Sales and Marketing", "Building B, 4th Floor")
+        # assert department2 object's id turns to None
+        assert ((None, "Sales and Marketing", "Building B, 4th Floor")
                 == (department2.id, department2.name, department2.location))
 
     def test_instance_from_db(self):
